@@ -45,6 +45,10 @@ def browser_context(tmp_path):
                 f"--load-extension={EXTENSION_PATH}",
             ],
         )
+        # Wait for the extension service worker to register before any test
+        # interaction. Without this, navigating to chrome-extension:// URLs
+        # immediately after launch causes ERR_ABORTED on slow/headless runners.
+        context.wait_for_event("serviceworker", timeout=30000)
         yield context
         context.close()
 
