@@ -1,6 +1,7 @@
 import allure
 import pytest
 from playwright.sync_api import Page, expect
+from conftest import API_DOMAIN
 
 BLOCKED_SITES = [
     ("gemini.google.com", "https://gemini.google.com"),
@@ -18,6 +19,7 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
     page: Page = configured_extension.new_page()
     try:
         with allure.step(f"Navigate to blocked site: {site_name}"):
+            page.on("response", lambda r: print(f"[NET] {r.status} {r.url}") if API_DOMAIN in r.url else None)
             page.goto(url)
             # The extension redirects the tab to a chrome-extension pageOverlay URL.
             # Wait for the URL to change away from the original site.
