@@ -19,12 +19,11 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
     try:
         with allure.step(f"Navigate to blocked site: {site_name}"):
             page.goto(url)
-            # The block modal is injected inside a shadow DOM, so use >> pierce
-            # to reach the #title-text element across the shadow root boundary.
-            expect(page.locator("#title-text")).to_be_visible(timeout=30000)
-
-        with allure.step(f"Capture screenshot of {site_name}"):
+            # The block modal is injected inside a shadow DOM.
+            # Take a diagnostic screenshot before asserting so we can see
+            # what the page looks like if the assertion fails.
             screenshot_helper(page, f"{site_name.replace('.', '_')}_blocked.png")
+            expect(page.locator("#title-text")).to_be_visible(timeout=30000)
     finally:
         page.close()
 
