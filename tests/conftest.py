@@ -67,7 +67,11 @@ def configured_extension(browser_context):
 
         page.fill("#apiDomain", API_DOMAIN)
         page.fill("#apiKey", API_KEY)
-        page.click("#saveButton")
+        with page.expect_response(
+            lambda r: API_DOMAIN in r.url and r.status == 200,
+            timeout=30000,
+        ):
+            page.click("#saveButton")
 
         page.close()
         page = browser_context.new_page()
