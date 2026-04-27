@@ -67,11 +67,10 @@ def configured_extension(browser_context):
 
         page.fill("#apiDomain", API_DOMAIN)
         page.fill("#apiKey", API_KEY)
-        with page.expect_response(
-            lambda r: API_DOMAIN in r.url and r.status == 200,
-            timeout=30000,
-        ):
-            page.click("#saveButton")
+        page.click("#saveButton")
+        # The popup hides #message when the backend config call succeeds.
+        # Waiting for it to be hidden confirms the policy was fetched.
+        page.wait_for_selector("#message", state="hidden", timeout=30000)
 
         page.close()
         page = browser_context.new_page()
