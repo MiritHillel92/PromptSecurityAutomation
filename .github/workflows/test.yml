@@ -19,6 +19,8 @@ jobs:
     env:
       PROMPT_SECURITY_API_KEY: ${{ secrets.PROMPT_SECURITY_API_KEY }}
       PROMPT_SECURITY_API_DOMAIN: ${{ vars.PROMPT_SECURITY_API_DOMAIN || 'eu.prompt.security' }}
+      CHATGPT_EMAIL: ${{ secrets.CHATGPT_EMAIL }}
+      CHATGPT_PASSWORD: ${{ secrets.CHATGPT_PASSWORD }}
 
     steps:
       - name: Checkout

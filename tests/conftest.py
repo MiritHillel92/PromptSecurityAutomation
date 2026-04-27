@@ -13,6 +13,8 @@ EXTENSION_ID = "iidnankcocecmgpcafggbgbmkbcldmno"
 
 API_KEY = os.environ.get("PROMPT_SECURITY_API_KEY", "")
 API_DOMAIN = os.environ.get("PROMPT_SECURITY_API_DOMAIN", "eu.prompt.security")
+CHATGPT_EMAIL = os.environ.get("CHATGPT_EMAIL", "")
+CHATGPT_PASSWORD = os.environ.get("CHATGPT_PASSWORD", "")
 
 
 def get_screenshot_directory() -> str:
@@ -88,6 +90,22 @@ def configured_extension(browser_context):
         )
 
         page.close()
+
+    if CHATGPT_EMAIL and CHATGPT_PASSWORD:
+        with allure.step("Log in to ChatGPT"):
+            page = browser_context.new_page()
+            page.goto("https://chatgpt.com/auth/login", wait_until="domcontentloaded")
+            page.get_by_role("button", name="Log in").click()
+            page.wait_for_selector("input[name='email'], input[type='email']", timeout=15000)
+            page.fill("input[name='email'], input[type='email']", CHATGPT_EMAIL)
+            page.get_by_role("button", name="Continue").click()
+            page.wait_for_selector("input[name='password'], input[type='password']", timeout=15000)
+            page.fill("input[name='password'], input[type='password']", CHATGPT_PASSWORD)
+            page.get_by_role("button", name="Continue").click()
+            page.wait_for_url("**/chatgpt.com/**", timeout=30000)
+            page.wait_for_selector("#prompt-textarea", state="visible", timeout=30000)
+            page.close()
+
     return browser_context
 
 
