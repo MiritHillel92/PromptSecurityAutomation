@@ -19,9 +19,9 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
     try:
         with allure.step(f"Navigate to blocked site: {site_name}"):
             page.goto(url)
-            # Poll for the block text via locator — avoids JS string injection which
-            # Gemini rejects via Trusted Types CSP.
-            expect(page.get_by_text("Access Denied", exact=False)).to_be_visible(timeout=30000)
+            # The block modal is injected inside a shadow DOM, so use >> pierce
+            # to reach the #title-text element across the shadow root boundary.
+            expect(page.locator("#title-text")).to_be_visible(timeout=30000)
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_blocked.png")
@@ -44,7 +44,6 @@ def test_site_is_allowed(configured_extension, screenshot_helper, site_name, url
             screenshot_helper(page, f"{site_name.replace('.', '_')}_allowed.png")
 
         with allure.step("Verify access is allowed"):
-            # Use locator with retry so a slow extension injection doesn't cause a false pass
-            expect(page.get_by_text("Access Denied", exact=False)).not_to_be_visible(timeout=5000)
+            expect(page.locator("#title-text")).not_to_be_visible(timeout=5000)
     finally:
         page.close()
