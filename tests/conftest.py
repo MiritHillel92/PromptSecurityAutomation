@@ -94,10 +94,7 @@ def configured_extension(browser_context):
         page.close()
 
     if CHATGPT_COOKIES:
-        page = browser_context.new_page()
-        page.goto("https://chatgpt.com", wait_until="domcontentloaded")
         browser_context.add_cookies(json.loads(CHATGPT_COOKIES))
-        page.close()
 
     return browser_context
 
