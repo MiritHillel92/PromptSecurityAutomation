@@ -1,3 +1,4 @@
+import json
 import os
 import allure
 import pytest
@@ -13,6 +14,7 @@ EXTENSION_ID = "iidnankcocecmgpcafggbgbmkbcldmno"
 
 API_KEY = os.environ.get("PROMPT_SECURITY_API_KEY", "")
 API_DOMAIN = os.environ.get("PROMPT_SECURITY_API_DOMAIN", "eu.prompt.security")
+CHATGPT_COOKIES = os.environ.get("CHATGPT_COOKIES", "")
 
 
 def get_screenshot_directory() -> str:
@@ -90,6 +92,13 @@ def configured_extension(browser_context):
         )
 
         page.close()
+
+    if CHATGPT_COOKIES:
+        page = browser_context.new_page()
+        page.goto("https://chatgpt.com", wait_until="domcontentloaded")
+        browser_context.add_cookies(json.loads(CHATGPT_COOKIES))
+        page.close()
+
     return browser_context
 
 

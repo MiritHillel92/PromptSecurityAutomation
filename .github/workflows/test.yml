@@ -19,6 +19,7 @@ jobs:
     env:
       PROMPT_SECURITY_API_KEY: ${{ secrets.PROMPT_SECURITY_API_KEY }}
       PROMPT_SECURITY_API_DOMAIN: ${{ vars.PROMPT_SECURITY_API_DOMAIN || 'eu.prompt.security' }}
+      CHATGPT_COOKIES: ${{ secrets.CHATGPT_COOKIES }}
 
     steps:
       - name: Checkout
