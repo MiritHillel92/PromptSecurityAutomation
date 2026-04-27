@@ -1,0 +1,6 @@
+.env
+screenshots/
+allure-results/
+__pycache__/
+.pytest_cache/
+chrome-win64/
