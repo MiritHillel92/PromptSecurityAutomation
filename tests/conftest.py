@@ -37,16 +37,20 @@ def browser_context(tmp_path):
     user_data_dir = tmp_path / "playwright_user_data"
 
     with sync_playwright() as p:
+        # Chromium's legacy --headless flag disables extensions entirely.
+        # Pass headless=False and use --headless=new via args so extensions load.
+        args = [
+            f"--disable-extensions-except={EXTENSION_PATH}",
+            f"--load-extension={EXTENSION_PATH}",
+        ]
+        if headless:
+            args.append("--headless=new")
+
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(user_data_dir),
-            headless=headless,
-            args=[
-                f"--disable-extensions-except={EXTENSION_PATH}",
-                f"--load-extension={EXTENSION_PATH}",
-            ],
+            headless=False,
+            args=args,
         )
-        # The service worker may already be active by the time we attach the
-        # listener, so fall back to a short sleep if the list is already populated.
         if not context.service_workers:
             context.wait_for_event("serviceworker", timeout=30000)
         yield context
