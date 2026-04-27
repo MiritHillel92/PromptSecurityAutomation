@@ -13,6 +13,7 @@ ALLOWED_SITES = [
 
 
 def capture_rule_action(context, page: Page, url: str) -> str:
+    """Intercept the Prompt Security get-rule-action API response."""
     captured = {}
 
     def handle_response(response):
@@ -36,13 +37,16 @@ def capture_rule_action(context, page: Page, url: str) -> str:
 def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url):
     page: Page = configured_extension.new_page()
     try:
-        with allure.step(f"Navigate to blocked site and capture API response: {site_name}"):
-            action = capture_rule_action(configured_extension, page, url)
+        with allure.step(f"Navigate to {site_name} and wait for block redirect"):
+            page.goto(url)
             page.wait_for_url("**/pageOverlay.html**", timeout=60000)
             expect(page.locator("#title-text")).to_be_visible(timeout=10000)
 
-        with allure.step("Assert Prompt Security API returned Block action"):
-            assert action == "Block", f"Expected API action 'Block', got: {action!r}"
+        with allure.step("Assert API block decision is reflected in redirect URL"):
+            current_url = page.url
+            assert "type=blockPage" in current_url, (
+                f"Expected 'type=blockPage' in redirect URL, got: {current_url!r}"
+            )
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_blocked.png")
@@ -56,12 +60,13 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
 def test_site_is_allowed(configured_extension, screenshot_helper, site_name, url):
     page: Page = configured_extension.new_page()
     try:
-        with allure.step(f"Navigate to allowed site and capture API response: {site_name}"):
+        with allure.step(f"Navigate to {site_name} and capture API response"):
             action = capture_rule_action(configured_extension, page, url)
             page.wait_for_load_state("networkidle", timeout=30000)
 
-        with allure.step("Assert Prompt Security API did not return Block action"):
-            assert action != "Block", f"Expected API action to allow, got: {action!r}"
+        with allure.step("Assert Prompt Security API returned Allow action"):
+            assert action is not None, "Expected an API response from Prompt Security, got none"
+            assert action != "Block", f"Expected API action to allow access, got: {action!r}"
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_allowed.png")
