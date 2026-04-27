@@ -101,3 +101,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-report
+
+      - name: Link to report in job summary
+        run: |
+          echo "## Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "[View Allure Report](https://MiritHillel92.github.io/PromptSecurityAutomation/)" >> $GITHUB_STEP_SUMMARY
