@@ -37,8 +37,8 @@ def test_site_is_allowed(configured_extension, screenshot_helper, site_name, url
     try:
         with allure.step(f"Navigate to allowed site: {site_name}"):
             page.goto(url)
-            # networkidle never fires on chatgpt.com due to persistent websocket connections
-            page.wait_for_load_state("load")
+            # Wait for the chat input to appear so the screenshot shows a loaded UI
+            page.wait_for_selector("#prompt-textarea", state="visible", timeout=30000)
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_allowed.png")
