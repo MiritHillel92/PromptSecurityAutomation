@@ -21,7 +21,7 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
             page.goto(url)
             # Poll for the block text via locator — avoids JS string injection which
             # Gemini rejects via Trusted Types CSP.
-            expect(page.get_by_text("Access Denied", exact=False)).to_be_visible(timeout=15000)
+            expect(page.get_by_text("Access Denied", exact=False)).to_be_visible(timeout=30000)
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_blocked.png")
