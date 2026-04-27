@@ -1,4 +1,3 @@
-import json
 import os
 import allure
 import pytest
@@ -14,7 +13,6 @@ EXTENSION_ID = "iidnankcocecmgpcafggbgbmkbcldmno"
 
 API_KEY = os.environ.get("PROMPT_SECURITY_API_KEY", "")
 API_DOMAIN = os.environ.get("PROMPT_SECURITY_API_DOMAIN", "eu.prompt.security")
-CHATGPT_COOKIES = os.environ.get("CHATGPT_COOKIES", "")
 
 
 def get_screenshot_directory() -> str:
@@ -70,8 +68,6 @@ def configured_extension(browser_context):
         page.fill("#apiDomain", API_DOMAIN)
         page.fill("#apiKey", API_KEY)
         page.click("#saveButton")
-        # The popup hides #message when the backend config call succeeds.
-        # Waiting for it to be hidden confirms the policy was fetched.
         page.wait_for_selector("#message", state="hidden", timeout=30000)
 
         page.close()
@@ -92,10 +88,6 @@ def configured_extension(browser_context):
         )
 
         page.close()
-
-    if CHATGPT_COOKIES:
-        browser_context.add_cookies(json.loads(CHATGPT_COOKIES))
-
     return browser_context
 
 
