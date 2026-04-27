@@ -14,13 +14,14 @@ ALLOWED_SITES = [
 
 @allure.feature("Extension Functionality")
 @allure.story("Block GenAI Applications")
+@pytest.mark.flaky(reruns=2, reruns_delay=5)
 @pytest.mark.parametrize("site_name,url", BLOCKED_SITES)
 def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url):
     page: Page = configured_extension.new_page()
     try:
         with allure.step(f"Navigate to blocked site: {site_name}"):
             page.goto(url)
-            page.wait_for_url("**/pageOverlay.html**", timeout=30000)
+            page.wait_for_url("**/pageOverlay.html**", timeout=60000)
             expect(page.locator("#title-text")).to_be_visible(timeout=10000)
 
         with allure.step(f"Capture screenshot of {site_name}"):

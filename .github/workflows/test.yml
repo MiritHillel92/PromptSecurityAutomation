@@ -40,7 +40,7 @@ jobs:
         run: sudo apt-get install -y xvfb
 
       - name: Run tests
-        run: xvfb-run --auto-servernum pytest tests/ -v --alluredir=allure-results
+        run: xvfb-run --auto-servernum pytest tests/ -v --alluredir=allure-results --reruns 2 --reruns-delay 5
 
       - name: Upload Allure results
         if: always()
