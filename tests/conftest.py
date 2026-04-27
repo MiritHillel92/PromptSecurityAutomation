@@ -33,23 +33,16 @@ def browser_context(tmp_path):
     if not API_KEY:
         pytest.fail("PROMPT_SECURITY_API_KEY environment variable is not set")
 
-    headless = os.environ.get("HEADLESS", "false").lower() == "true"
     user_data_dir = tmp_path / "playwright_user_data"
 
     with sync_playwright() as p:
-        # Chromium's legacy --headless flag disables extensions entirely.
-        # Pass headless=False and use --headless=new via args so extensions load.
-        args = [
-            f"--disable-extensions-except={EXTENSION_PATH}",
-            f"--load-extension={EXTENSION_PATH}",
-        ]
-        if headless:
-            args.append("--headless=new")
-
         context = p.chromium.launch_persistent_context(
             user_data_dir=str(user_data_dir),
             headless=False,
-            args=args,
+            args=[
+                f"--disable-extensions-except={EXTENSION_PATH}",
+                f"--load-extension={EXTENSION_PATH}",
+            ],
         )
         if not context.service_workers:
             context.wait_for_event("serviceworker", timeout=30000)
@@ -61,8 +54,6 @@ def browser_context(tmp_path):
 def configured_extension(browser_context):
     with allure.step("Configure extension with API credentials"):
         page = browser_context.new_page()
-
-        # Visit a real page first so the extension service worker has a chance to initialize
         page.goto("https://example.com")
         page.wait_for_load_state("networkidle")
 
@@ -78,7 +69,6 @@ def configured_extension(browser_context):
         page.fill("#apiKey", API_KEY)
         page.click("#saveButton")
 
-        # Re-open the popup to confirm values actually persisted in storage
         page.close()
         page = browser_context.new_page()
         page.goto(
