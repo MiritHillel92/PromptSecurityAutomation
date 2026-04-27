@@ -12,9 +12,9 @@ ALLOWED_SITES = [
 ]
 
 
-def capture_rule_action(context, page: Page, url: str, timeout: int = 15000) -> str:
+def capture_rule_action(page: Page, url: str, timeout: int = 15000) -> str:
     """Navigate to url and capture the Prompt Security get-rule-action API response."""
-    with context.expect_response(
+    with page.expect_response(
         lambda r: "get-rule-action" in r.url, timeout=timeout
     ) as response_info:
         page.goto(url)
@@ -34,7 +34,7 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
     page: Page = configured_extension.new_page()
     try:
         with allure.step(f"Navigate to {site_name} and capture API response"):
-            action = capture_rule_action(configured_extension, page, url)
+            action = capture_rule_action(page, url)
             page.wait_for_url("**/pageOverlay.html**", timeout=60000)
             expect(page.locator("#title-text")).to_be_visible(timeout=10000)
 
@@ -54,7 +54,7 @@ def test_site_is_allowed(configured_extension, screenshot_helper, site_name, url
     page: Page = configured_extension.new_page()
     try:
         with allure.step(f"Navigate to {site_name} and capture API response"):
-            action = capture_rule_action(configured_extension, page, url)
+            action = capture_rule_action(page, url)
             page.wait_for_load_state("networkidle", timeout=30000)
 
         with allure.step("Assert Prompt Security API did not block access"):
