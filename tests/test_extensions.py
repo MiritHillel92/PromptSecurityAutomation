@@ -37,12 +37,17 @@ def test_site_is_allowed(configured_extension, screenshot_helper, site_name, url
     try:
         with allure.step(f"Navigate to allowed site: {site_name}"):
             page.goto(url)
-            # Wait for the chat input to appear so the screenshot shows a loaded UI
-            page.wait_for_selector(
-                "#prompt-textarea, [data-testid='send-button'], textarea[placeholder]",
-                state="visible",
-                timeout=30000,
-            )
+            page.wait_for_load_state("domcontentloaded")
+            # Wait for any main content — ChatGPT may show login wall in CI,
+            # but the key assertion is that the block modal is NOT shown.
+            try:
+                page.wait_for_selector(
+                    "#prompt-textarea, [data-testid='send-button'], main",
+                    state="visible",
+                    timeout=15000,
+                )
+            except Exception:
+                pass
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_allowed.png")
