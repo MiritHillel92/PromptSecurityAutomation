@@ -19,11 +19,13 @@ def test_site_is_blocked(configured_extension, screenshot_helper, site_name, url
     try:
         with allure.step(f"Navigate to blocked site: {site_name}"):
             page.goto(url)
-            page.wait_for_load_state("domcontentloaded")
-            # Reload so the extension's background worker has a fully initialized
-            # tab context with which to fire the block modal on navigation.
-            page.reload(wait_until="domcontentloaded")
-            expect(page.locator("#title-text")).to_be_visible(timeout=30000)
+            # The extension redirects the tab to a chrome-extension pageOverlay URL.
+            # Wait for the URL to change away from the original site.
+            page.wait_for_url(
+                lambda u: "chrome-extension://" in u,
+                timeout=30000,
+            )
+            expect(page.locator("#title-text")).to_be_visible(timeout=10000)
 
         with allure.step(f"Capture screenshot of {site_name}"):
             screenshot_helper(page, f"{site_name.replace('.', '_')}_blocked.png")
