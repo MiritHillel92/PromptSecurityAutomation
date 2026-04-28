@@ -1,0 +1,6 @@
+.env
+CLAUDE.md
+screenshots/
+allure-results/
+__pycache__/
+.pytest_cache/
