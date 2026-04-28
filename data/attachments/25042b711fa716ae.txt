@@ -1,0 +1,6 @@
+[12:41:44.249] Navigating to https://gemini.google.com
+[12:41:45.564] Waiting for redirect to pageOverlay.html
+[12:41:45.571] Redirected to block page in 1.32s — URL: chrome-extension://iidnankcocecmgpcafggbgbmkbcldmno/html/pageOverlay.html?originalUrl=https%3A%2F%2Fgemini.google.com%2Fapp&domain=gemini.google.com&type=blockPage&canBypass=Prevent&tabId=498875528&isEnterpriseVersion=false
+[12:41:45.648] Block overlay title visible in 0.08s
+[12:41:45.648] URL assertions passed: type=blockPage and correct domain present
+[12:41:45.763] Screenshot captured
