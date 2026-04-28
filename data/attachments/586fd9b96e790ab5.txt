@@ -1,6 +1,0 @@
-[11:37:32.197] Navigating to https://chatgpt.com
-[11:37:33.498] Page loaded, current URL: https://chatgpt.com/
-[11:37:33.498] Asserting URL is not blocked: https://chatgpt.com/
-[11:37:33.498] URL assertions passed: site not redirected to block page
-[11:37:33.520] Block overlay is not visible — site is allowed
-[11:37:33.745] Screenshot captured
