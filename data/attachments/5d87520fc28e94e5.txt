@@ -1,0 +1,5 @@
+[17:14:45.029] Navigating to https://chatgpt.com
+[17:14:47.674] Page loaded in 2.64s — URL: https://chatgpt.com/
+[17:14:47.674] URL assertions passed: site not redirected to block page
+[17:14:47.695] Block overlay is not visible — site is allowed
+[17:14:47.810] Screenshot captured

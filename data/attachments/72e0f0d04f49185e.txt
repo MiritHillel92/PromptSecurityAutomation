@@ -1,6 +1,0 @@
-[17:00:15.713] Navigating to https://claude.ai
-[17:00:16.307] Waiting for redirect to pageOverlay.html
-[17:00:16.310] Redirected to block page in 0.60s — URL: chrome-extension://iidnankcocecmgpcafggbgbmkbcldmno/html/pageOverlay.html?originalUrl=https%3A%2F%2Fclaude.ai%2Flogin&domain=claude.ai&type=blockPage&canBypass=Prevent&tabId=348365629&isEnterpriseVersion=true
-[17:00:16.328] Block overlay title visible in 0.02s
-[17:00:16.328] URL assertions passed: type=blockPage and correct domain present
-[17:00:16.405] Screenshot captured
