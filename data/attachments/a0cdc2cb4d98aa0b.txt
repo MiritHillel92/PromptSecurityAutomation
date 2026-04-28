@@ -1,2 +1,0 @@
-[11:36:21.681] Navigating to https://gemini.google.com
-[11:36:22.556] Waiting for redirect to pageOverlay.html
