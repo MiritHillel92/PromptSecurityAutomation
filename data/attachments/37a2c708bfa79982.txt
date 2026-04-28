@@ -1,7 +1,0 @@
-[11:44:16.357] Navigating to https://claude.ai
-[11:44:16.401] [console.error] Failed to load resource: the server responded with a status of 403 ()
-[11:44:16.504] Waiting for redirect to pageOverlay.html
-[11:44:16.727] Redirected to block page in 0.37s — URL: chrome-extension://iidnankcocecmgpcafggbgbmkbcldmno/html/pageOverlay.html?originalUrl=https%3A%2F%2Fclaude.ai%2F%3F__cf_chl_rt_tk%3DtwHnQtt5KkBuNWxh0Ix5.E09xWc8JoU3AGqnxsXc9ok-1777376656-1.0.1.1-gYqlm2iq2y6kp3aD8m1Mo_rKye8uWCjGaRVx_tbjcOk&domain=claude.ai&type=blockPage&canBypass=Prevent&tabId=599397157&isEnterpriseVersion=false
-[11:44:16.764] Block overlay title visible in 0.04s
-[11:44:16.765] URL assertions passed: type=blockPage and correct domain present
-[11:44:16.839] Screenshot captured
