@@ -1,0 +1,7 @@
+[11:37:40.409] Navigating to https://gemini.google.com
+[11:37:41.587] Waiting for redirect to pageOverlay.html
+[11:37:41.593] Redirected to: chrome-extension://iidnankcocecmgpcafggbgbmkbcldmno/html/pageOverlay.html?originalUrl=https%3A%2F%2Fgemini.google.com%2F&domain=gemini.google.com&type=blockPage&canBypass=Prevent&tabId=75950599&isEnterpriseVersion=false
+[11:37:41.656] Block overlay title is visible
+[11:37:41.656] Current URL: chrome-extension://iidnankcocecmgpcafggbgbmkbcldmno/html/pageOverlay.html?originalUrl=https%3A%2F%2Fgemini.google.com%2F&domain=gemini.google.com&type=blockPage&canBypass=Prevent&tabId=75950599&isEnterpriseVersion=false
+[11:37:41.656] URL assertions passed: type=blockPage and correct domain present
+[11:37:41.772] Screenshot captured
