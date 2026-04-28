@@ -1,2 +1,0 @@
-[16:59:13.394] Navigating to https://claude.ai
-[16:59:13.628] Waiting for redirect to pageOverlay.html
