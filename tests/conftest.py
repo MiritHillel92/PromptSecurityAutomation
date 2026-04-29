@@ -18,6 +18,8 @@ API_DOMAIN = os.environ.get("PROMPT_SECURITY_API_DOMAIN", "eu.prompt.security")
 SCREENSHOTS_DIR = os.path.join(BASE_DIR, "screenshots")
 
 
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
 def save_screenshot(page, file_name: str) -> str:
     os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
     path = os.path.join(SCREENSHOTS_DIR, file_name)
@@ -25,6 +27,48 @@ def save_screenshot(page, file_name: str) -> str:
     allure.attach.file(path, name=file_name, attachment_type=allure.attachment_type.PNG)
     return path
 
+
+def _wait_for_service_worker(context):
+    if not context.service_workers:
+        context.wait_for_event("serviceworker", timeout=30000)
+    context.service_workers[0].evaluate("() => self.registration.ready")
+
+
+def _configure_extension(context):
+    with allure.step("Configure extension with API credentials"):
+        page = context.new_page()
+        page.goto(
+            f"chrome-extension://{EXTENSION_ID}/html/popup.html",
+            wait_until="domcontentloaded",
+            timeout=60000,
+        )
+        page.wait_for_selector("#apiDomain", state="visible", timeout=30000)
+        page.fill("#apiDomain", API_DOMAIN)
+        page.fill("#apiKey", API_KEY)
+        page.click("#saveButton")
+        page.wait_for_selector("#message", state="hidden", timeout=30000)
+        page.close()
+
+
+def _verify_extension_config(context):
+    with allure.step("Verify extension credentials were saved"):
+        page = context.new_page()
+        page.goto(
+            f"chrome-extension://{EXTENSION_ID}/html/popup.html",
+            wait_until="domcontentloaded",
+            timeout=60000,
+        )
+        page.wait_for_selector("#apiDomain", state="visible", timeout=30000)
+        assert page.input_value("#apiDomain") == API_DOMAIN, (
+            f"Extension config not saved correctly: apiDomain shows {page.input_value('#apiDomain')!r}"
+        )
+        assert page.input_value("#apiKey") == API_KEY, (
+            f"Extension config not saved correctly: apiKey shows {page.input_value('#apiKey')!r}"
+        )
+        page.close()
+
+
+# ── Fixtures ──────────────────────────────────────────────────────────────────
 
 @pytest.fixture(scope="session")
 def configured_extension(tmp_path_factory):
@@ -42,40 +86,9 @@ def configured_extension(tmp_path_factory):
                 f"--load-extension={EXTENSION_PATH}",
             ],
         )
-        if not context.service_workers:
-            context.wait_for_event("serviceworker", timeout=30000)
-
-        context.service_workers[0].evaluate("() => self.registration.ready")
-
-        with allure.step("Configure extension with API credentials"):
-            page = context.new_page()
-            page.goto(
-                f"chrome-extension://{EXTENSION_ID}/html/popup.html",
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-            page.wait_for_selector("#apiDomain", state="visible", timeout=30000)
-            page.fill("#apiDomain", API_DOMAIN)
-            page.fill("#apiKey", API_KEY)
-            page.click("#saveButton")
-            page.wait_for_selector("#message", state="hidden", timeout=30000)
-            page.close()
-
-        with allure.step("Verify extension credentials were saved"):
-            page = context.new_page()
-            page.goto(
-                f"chrome-extension://{EXTENSION_ID}/html/popup.html",
-                wait_until="domcontentloaded",
-                timeout=60000,
-            )
-            page.wait_for_selector("#apiDomain", state="visible", timeout=30000)
-            assert page.input_value("#apiDomain") == API_DOMAIN, (
-                f"Extension config not saved correctly: apiDomain shows {page.input_value('#apiDomain')!r}"
-            )
-            assert page.input_value("#apiKey") == API_KEY, (
-                f"Extension config not saved correctly: apiKey shows {page.input_value('#apiKey')!r}"
-            )
-            page.close()
+        _wait_for_service_worker(context)
+        _configure_extension(context)
+        _verify_extension_config(context)
 
         yield context
         context.close()
