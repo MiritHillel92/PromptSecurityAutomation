@@ -70,6 +70,7 @@ def _assert_no_block_overlay(page: Page, log):
 
 def _capture_screenshot(page: Page, site_name: str, suffix: str, screenshot_helper, log):
     with allure.step(f"Capture screenshot of {site_name}"):
+        page.wait_for_load_state("domcontentloaded")
         screenshot_helper(page, f"{site_name.replace('.', '_')}_{suffix}.png")
         log("Screenshot captured")
 
