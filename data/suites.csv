@@ -1,4 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","1670","test_site_is_blocked[gemini.google.com-https://gemini.google.com]","tests","2026-04-28","passed","2026-04-28","","test_extensions","",""
-"","1875","test_site_is_allowed[chatgpt.com-https://chatgpt.com]","tests","2026-04-28","passed","2026-04-28","","test_extensions","",""
-"","489","test_site_is_blocked[claude.ai-https://claude.ai]","tests","2026-04-28","passed","2026-04-28","","test_extensions","",""
+"","2034","test_site_is_allowed[chatgpt.com-https://chatgpt.com]","tests","2026-04-29","passed","2026-04-29","","test_extensions","",""
+"","491","test_site_is_blocked[claude.ai-https://claude.ai]","tests","2026-04-29","passed","2026-04-29","","test_extensions","",""
+"","1589","test_site_is_blocked[gemini.google.com-https://gemini.google.com]","tests","2026-04-29","passed","2026-04-29","","test_extensions","",""
